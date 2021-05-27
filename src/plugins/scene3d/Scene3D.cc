@@ -1667,21 +1667,13 @@ void RenderWindowItem::wheelEvent(QWheelEvent *_e)
 ////////////////////////////////////////////////
 void RenderWindowItem::keyPressEvent(QKeyEvent *_event)
 {
-  QKeyEvent *keyEvent = static_cast<QKeyEvent*>(_event);
-  if (keyEvent)
-  {
-    this->HandleKeyPress(keyEvent);
-  }
+  this->HandleKeyPress(_event);
 }
 
 ////////////////////////////////////////////////
 void RenderWindowItem::keyReleaseEvent(QKeyEvent *_event)
 {
-  QKeyEvent *keyEvent = static_cast<QKeyEvent*>(_event);
-  if (keyEvent)
-  {
-    this->HandleKeyRelease(keyEvent);
-  }
+  this->HandleKeyRelease(_event);
 }
 
 ////////////////////////////////////////////////
