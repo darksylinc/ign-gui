@@ -88,6 +88,24 @@ TEST(GuiEventsTest, RightClickToScene)
 }
 
 /////////////////////////////////////////////////
+TEST(GuiEventsTest, KeyPress)
+{
+  events::KeyPress event(1);
+
+  EXPECT_LT(QEvent::User, event.type());
+  EXPECT_EQ(1, event.Key());
+}
+
+/////////////////////////////////////////////////
+TEST(GuiEventsTest, KeyRelease)
+{
+  events::KeyRelease event(2);
+
+  EXPECT_LT(QEvent::User, event.type());
+  EXPECT_EQ(2, event.Key());
+}
+
+/////////////////////////////////////////////////
 TEST(GuiEventsTest, DropdownMenuEnabled)
 {
   events::DropdownMenuEnabled event(true);
@@ -100,4 +118,3 @@ TEST(GuiEventsTest, DropdownMenuEnabled)
   EXPECT_LT(QEvent::User, event2.type());
   EXPECT_EQ(false, event2.MenuEnabled());
 }
-
