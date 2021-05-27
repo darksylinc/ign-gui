@@ -244,7 +244,7 @@ TEST(Scene3DTest, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Events))
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     QCoreApplication::processEvents();
 
-    QTest::keyRelease(win->QuickWindow(), Qt::Key_Escape, nullptr);
+    QTest::keyRelease(win->QuickWindow(), Qt::Key_Escape, Qt::NoModifier);
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     QCoreApplication::processEvents();
 
