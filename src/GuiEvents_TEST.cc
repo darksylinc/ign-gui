@@ -90,19 +90,25 @@ TEST(GuiEventsTest, RightClickToScene)
 /////////////////////////////////////////////////
 TEST(GuiEventsTest, KeyPress)
 {
-  events::KeyPress event(1);
+  events::KeyPress event(1, false, true, true);
 
   EXPECT_LT(QEvent::User, event.type());
   EXPECT_EQ(1, event.Key());
+  EXPECT_FALSE(event.Control());
+  EXPECT_TRUE(event.Shift());
+  EXPECT_TRUE(event.Alt());
 }
 
 /////////////////////////////////////////////////
 TEST(GuiEventsTest, KeyRelease)
 {
-  events::KeyRelease event(2);
+  events::KeyRelease event(2, false, true, true);
 
   EXPECT_LT(QEvent::User, event.type());
   EXPECT_EQ(2, event.Key());
+  EXPECT_FALSE(event.Control());
+  EXPECT_TRUE(event.Shift());
+  EXPECT_TRUE(event.Alt());
 }
 
 /////////////////////////////////////////////////

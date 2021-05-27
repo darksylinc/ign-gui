@@ -262,8 +262,10 @@ namespace ignition
       {
         /// \brief Constructor
         /// \param[in] _key The released key within the scene
-        public: explicit KeyRelease(const int &_key)
-            : QEvent(kType), key(_key)
+        public: explicit KeyRelease(const int &_key, const int &_control,
+          const int &_shift, const int &_alt)
+            : QEvent(kType), key(_key), control(_control), shift(_shift),
+              alt(_alt)
         {
         }
 
@@ -277,8 +279,39 @@ namespace ignition
           return this->key;
         }
 
-        /// \brief The key that the user released within the scene.
+        /// \brief Get whether the shift key was held during this key event
+        /// \return True if the shift key was pressed
+        public: bool Shift() const
+        {
+          return this->shift;
+        }
+
+        /// \brief Get whether the control key was held during this key event
+        /// \return True if the control key was pressed
+        public: bool Control() const
+        {
+          return this->control;
+        }
+
+        /// \brief Get whether the alt key was held during this key event
+        /// \return True if the alt key was pressed
+
+        public: bool Alt() const
+        {
+          return this->alt;
+        }
+
+        /// \brief The key that the user pressed within the scene.
         private: int key;
+
+        /// \brief Was control held during this key event?
+        private: bool control = false;
+
+        /// \brief Was shift held during this key event?
+        private: bool shift = false;
+
+        /// \brief Was alt held during this key event?
+        private: bool alt = false;
       };
 
       /// \brief Event which is called to broadcast the key press within
@@ -287,8 +320,10 @@ namespace ignition
       {
         /// \brief Constructor
         /// \param[in] _key The pressed key within the scene
-        public: explicit KeyPress(const int &_key)
-            : QEvent(kType), key(_key)
+        public: explicit KeyPress(const int &_key, const int &_control,
+          const int &_shift, const int &_alt)
+            : QEvent(kType), key(_key), control(_control), shift(_shift),
+              alt(_alt)
         {
         }
 
@@ -302,8 +337,39 @@ namespace ignition
           return this->key;
         }
 
+        /// \brief Get whether the shift key was held during this key event
+        /// \return True if the shift key was pressed
+        public: bool Shift() const
+        {
+          return this->shift;
+        }
+
+        /// \brief Get whether the control key was held during this key event
+        /// \return True if the control key was pressed
+        public: bool Control() const
+        {
+          return this->control;
+        }
+
+        /// \brief Get whether the alt key was held during this key event
+        /// \return True if the alt key was pressed
+
+        public: bool Alt() const
+        {
+          return this->alt;
+        }
+
         /// \brief The key that the user pressed within the scene.
         private: int key;
+
+        /// \brief Was control held during this key event?
+        private: bool control = false;
+
+        /// \brief Was shift held during this key event?
+        private: bool shift = false;
+
+        /// \brief Was alt held during this key event?
+        private: bool alt = false;
       };
     }
   }

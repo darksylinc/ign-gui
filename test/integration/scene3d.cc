@@ -162,7 +162,13 @@ TEST(Scene3DTest, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Events))
   bool receivedLeftEvent{false};
   bool receivedHoverEvent{false};
   bool receivedKeyPressEvent{false};
+  bool receivedKeyPressEventAlt{false};
+  bool receivedKeyPressEventControl{false};
+  bool receivedKeyPressEventShift{false};
   bool receivedKeyReleaseEvent{false};
+  bool receivedKeyReleaseEventAlt{false};
+  bool receivedKeyReleaseEventControl{false};
+  bool receivedKeyReleaseEventShift{false};
 
   // Position vectors reported by click events
   math::Vector3d leftClickPoint, rightClickPoint;
@@ -198,12 +204,18 @@ TEST(Scene3DTest, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Events))
       receivedKeyReleaseEvent = true;
       auto keyReleased = static_cast<events::KeyRelease*>(_event);
       keyReleasedValue = keyReleased->Key();
+      receivedKeyReleaseEventAlt = keyReleased->Alt();
+      receivedKeyReleaseEventControl = keyReleased->Control();
+      receivedKeyReleaseEventShift = keyReleased->Shift();
     }
     else if (_event->type() == events::KeyPress::kType)
     {
       receivedKeyPressEvent = true;
       auto keyPress = static_cast<events::KeyPress*>(_event);
       keyPressedValue = keyPress->Key();
+      receivedKeyPressEventAlt = keyPress->Alt();
+      receivedKeyPressEventControl = keyPress->Control();
+      receivedKeyPressEventShift = keyPress->Shift();
     }
   };
 
@@ -228,11 +240,11 @@ TEST(Scene3DTest, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Events))
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     QCoreApplication::processEvents();
 
-    QTest::keyPress(win->QuickWindow(), Qt::Key_Tab, Qt::NoModifier);
+    QTest::keyPress(win->QuickWindow(), Qt::Key_A, Qt::AltModifier);
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     QCoreApplication::processEvents();
 
-    QTest::keyRelease(win->QuickWindow(), Qt::Key_Escape, Qt::NoModifier);
+    QTest::keyRelease(win->QuickWindow(), Qt::Key_Escape, nullptr);
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     QCoreApplication::processEvents();
 
@@ -248,7 +260,13 @@ TEST(Scene3DTest, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Events))
   EXPECT_NEAR(11.942695, leftClickPoint.Y(), 1e-4);
   EXPECT_NEAR(4.159424, leftClickPoint.Z(), 1e-4);
   EXPECT_TRUE(receivedKeyReleaseEvent);
+  EXPECT_FALSE(receivedKeyReleaseEventAlt);
+  EXPECT_FALSE(receivedKeyReleaseEventControl);
+  EXPECT_FALSE(receivedKeyReleaseEventShift);
   EXPECT_EQ(Qt::Key_Escape, keyReleasedValue);
   EXPECT_TRUE(receivedKeyPressEvent);
-  EXPECT_EQ(Qt::Key_Tab, keyPressedValue);
+  EXPECT_TRUE(receivedKeyPressEventAlt);
+  EXPECT_FALSE(receivedKeyPressEventControl);
+  EXPECT_FALSE(receivedKeyPressEventShift);
+  EXPECT_EQ(Qt::Key_A, keyPressedValue);
 }
