@@ -325,10 +325,10 @@ namespace plugins
     protected: virtual void wheelEvent(QWheelEvent *_e) override;
 
     // Documentation inherited
-    protected: virtual void	keyPressEvent(QKeyEvent *_event) override;
+    protected: virtual void keyPressEvent(QKeyEvent *_event) override;
 
     // Documentation inherited
-    protected: virtual void	keyReleaseEvent(QKeyEvent *_event) override;
+    protected: virtual void keyReleaseEvent(QKeyEvent *_event) override;
 
     /// \brief Overrides the paint event to render the render engine
     /// camera view
