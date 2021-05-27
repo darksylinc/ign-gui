@@ -148,7 +148,7 @@ namespace plugins
     /// \brief Broadcasts the currently key release
     private: void BroadcastKeyRelease();
 
-    /// \brief Broadcasts the currently key release
+    /// \brief Broadcasts the currently key press
     private: void BroadcastKeyPress();
 
     /// \brief Retrieve the first point on a surface in the 3D scene hit by a

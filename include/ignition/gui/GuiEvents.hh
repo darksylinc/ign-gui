@@ -295,7 +295,7 @@ namespace ignition
         /// \brief Unique type for this event.
         static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 9);
 
-        /// \brief Get the released key within the scene that the user pressed.
+        /// \brief Get the key within the scene that the user pressed
         /// \return The key code.
         public: int Key() const
         {
