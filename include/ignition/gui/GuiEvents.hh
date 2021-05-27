@@ -255,6 +255,56 @@ namespace ignition
         /// for this event.
         private: bool menuEnabled;
       };
+
+      /// \brief Event which is called to broadcast the key release within
+      /// the scene.
+      class KeyRelease : public QEvent
+      {
+        /// \brief Constructor
+        /// \param[in] _key The released key within the scene
+        public: explicit KeyRelease(const int &_key)
+            : QEvent(kType), key(_key)
+        {
+        }
+
+        /// \brief Unique type for this event.
+        static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 8);
+
+        /// \brief Get the released key within the scene that the user released.
+        /// \return The key code.
+        public: int Key() const
+        {
+          return this->key;
+        }
+
+        /// \brief The key that the user released within the scene.
+        private: int key;
+      };
+
+      /// \brief Event which is called to broadcast the key press within
+      /// the scene.
+      class KeyPress : public QEvent
+      {
+        /// \brief Constructor
+        /// \param[in] _key The pressed key within the scene
+        public: explicit KeyPress(const int &_key)
+            : QEvent(kType), key(_key)
+        {
+        }
+
+        /// \brief Unique type for this event.
+        static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 9);
+
+        /// \brief Get the released key within the scene that the user pressed.
+        /// \return The key code.
+        public: int Key() const
+        {
+          return this->key;
+        }
+
+        /// \brief The key that the user pressed within the scene.
+        private: int key;
+      };
     }
   }
 }

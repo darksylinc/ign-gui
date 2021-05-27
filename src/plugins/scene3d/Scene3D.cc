@@ -898,6 +898,8 @@ void IgnRenderer::HandleMouseEvent()
   this->BroadcastHoverPos();
   this->BroadcastLeftClick();
   this->BroadcastRightClick();
+  this->BroadcastKeyPress();
+  this->BroadcastKeyRelease();
   this->HandleMouseViewControl();
 }
 
@@ -990,7 +992,7 @@ void IgnRenderer::HandleKeyRelease(QKeyEvent *_e)
 
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
 
-  this->dataPtr->keyEvent.SetKey(0);
+  this->dataPtr->keyEvent.SetKey(_e->key());
 
   this->dataPtr->keyEvent.SetControl(
     (_e->modifiers() & Qt::ControlModifier)
@@ -1056,6 +1058,30 @@ void IgnRenderer::BroadcastRightClick()
 
   events::RightClickToScene rightClickToSceneEvent(pos);
   App()->sendEvent(App()->findChild<MainWindow *>(), &rightClickToSceneEvent);
+}
+
+/////////////////////////////////////////////////
+void IgnRenderer::BroadcastKeyRelease()
+{
+  events::KeyRelease keyRelease(this->dataPtr->keyEvent.Key());
+
+  if (this->dataPtr->keyEvent.Type() == common::KeyEvent::RELEASE)
+  {
+    App()->sendEvent(App()->findChild<MainWindow *>(), &keyRelease);
+    this->dataPtr->keyEvent.SetType(common::KeyEvent::NO_EVENT);
+  }
+}
+
+/////////////////////////////////////////////////
+void IgnRenderer::BroadcastKeyPress()
+{
+  events::KeyPress keyPress(this->dataPtr->keyEvent.Key());
+
+  if (this->dataPtr->keyEvent.Type() == common::KeyEvent::PRESS)
+  {
+    App()->sendEvent(App()->findChild<MainWindow *>(), &keyPress);
+    this->dataPtr->keyEvent.SetType(common::KeyEvent::NO_EVENT);
+  }
 }
 
 /////////////////////////////////////////////////
@@ -1636,6 +1662,26 @@ void RenderWindowItem::wheelEvent(QWheelEvent *_e)
   double scroll = (_e->angleDelta().y() > 0) ? -1.0 : 1.0;
   this->dataPtr->renderThread->ignRenderer.NewMouseEvent(
       this->dataPtr->mouseEvent, math::Vector2d(scroll, scroll));
+}
+
+////////////////////////////////////////////////
+void RenderWindowItem::keyPressEvent(QKeyEvent *_event)
+{
+  QKeyEvent *keyEvent = static_cast<QKeyEvent*>(_event);
+  if (keyEvent)
+  {
+    this->HandleKeyPress(keyEvent);
+  }
+}
+
+////////////////////////////////////////////////
+void RenderWindowItem::keyReleaseEvent(QKeyEvent *_event)
+{
+  QKeyEvent *keyEvent = static_cast<QKeyEvent*>(_event);
+  if (keyEvent)
+  {
+    this->HandleKeyRelease(keyEvent);
+  }
 }
 
 ////////////////////////////////////////////////
