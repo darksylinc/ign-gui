@@ -262,6 +262,9 @@ namespace ignition
       {
         /// \brief Constructor
         /// \param[in] _key The released key within the scene
+        /// \param[in] _control Was control held during this key event?
+        /// \param[in] _shift Was shift held during this key event?
+        /// \param[in] _alt Was alt held during this key event?
         public: explicit KeyRelease(const int &_key, const int &_control,
           const int &_shift, const int &_alt)
             : QEvent(kType), key(_key), control(_control), shift(_shift),
@@ -295,7 +298,6 @@ namespace ignition
 
         /// \brief Get whether the alt key was held during this key event
         /// \return True if the alt key was pressed
-
         public: bool Alt() const
         {
           return this->alt;
@@ -320,6 +322,9 @@ namespace ignition
       {
         /// \brief Constructor
         /// \param[in] _key The pressed key within the scene
+        /// \param[in] _control Was control held during this key event?
+        /// \param[in] _shift Was shift held during this key event?
+        /// \param[in] _alt Was alt held during this key event?
         public: explicit KeyPress(const int &_key, const int &_control,
           const int &_shift, const int &_alt)
             : QEvent(kType), key(_key), control(_control), shift(_shift),
@@ -353,7 +358,6 @@ namespace ignition
 
         /// \brief Get whether the alt key was held during this key event
         /// \return True if the alt key was pressed
-
         public: bool Alt() const
         {
           return this->alt;
