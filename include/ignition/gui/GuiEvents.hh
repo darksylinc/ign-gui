@@ -21,6 +21,9 @@
 #include <string>
 #include <utility>
 #include <vector>
+
+#include <ignition/common/KeyEvent.hh>
+
 #include <ignition/math/Vector3.hh>
 
 namespace ignition
@@ -261,14 +264,9 @@ namespace ignition
       class KeyRelease : public QEvent
       {
         /// \brief Constructor
-        /// \param[in] _key The released key within the scene
-        /// \param[in] _control Was control held during this key event?
-        /// \param[in] _shift Was shift held during this key event?
-        /// \param[in] _alt Was alt held during this key event?
-        public: explicit KeyRelease(const int &_key, const int &_control,
-          const int &_shift, const int &_alt)
-            : QEvent(kType), key(_key), control(_control), shift(_shift),
-              alt(_alt)
+        /// \param[in] _key The key released event within the scene
+        public: explicit KeyRelease(const ignition::common::KeyEvent &_key)
+            : QEvent(kType), key(_key)
         {
         }
 
@@ -277,43 +275,13 @@ namespace ignition
 
         /// \brief Get the released key within the scene that the user released.
         /// \return The key code.
-        public: int Key() const
+        public: ignition::common::KeyEvent Key() const
         {
           return this->key;
         }
 
-        /// \brief Get whether the shift key was held during this key event
-        /// \return True if the shift key was pressed
-        public: bool Shift() const
-        {
-          return this->shift;
-        }
-
-        /// \brief Get whether the control key was held during this key event
-        /// \return True if the control key was pressed
-        public: bool Control() const
-        {
-          return this->control;
-        }
-
-        /// \brief Get whether the alt key was held during this key event
-        /// \return True if the alt key was pressed
-        public: bool Alt() const
-        {
-          return this->alt;
-        }
-
-        /// \brief The key that the user pressed within the scene.
-        private: int key;
-
-        /// \brief Was control held during this key event?
-        private: bool control = false;
-
-        /// \brief Was shift held during this key event?
-        private: bool shift = false;
-
-        /// \brief Was alt held during this key event?
-        private: bool alt = false;
+        /// \brief The key event that the user pressed within the scene.
+        private: ignition::common::KeyEvent key;
       };
 
       /// \brief Event which is called to broadcast the key press within
@@ -325,10 +293,8 @@ namespace ignition
         /// \param[in] _control Was control held during this key event?
         /// \param[in] _shift Was shift held during this key event?
         /// \param[in] _alt Was alt held during this key event?
-        public: explicit KeyPress(const int &_key, const int &_control,
-          const int &_shift, const int &_alt)
-            : QEvent(kType), key(_key), control(_control), shift(_shift),
-              alt(_alt)
+        public: explicit KeyPress(const ignition::common::KeyEvent &_key)
+            : QEvent(kType), key(_key)
         {
         }
 
@@ -337,43 +303,13 @@ namespace ignition
 
         /// \brief Get the key within the scene that the user pressed
         /// \return The key code.
-        public: int Key() const
+        public: ignition::common::KeyEvent Key() const
         {
           return this->key;
         }
 
-        /// \brief Get whether the shift key was held during this key event
-        /// \return True if the shift key was pressed
-        public: bool Shift() const
-        {
-          return this->shift;
-        }
-
-        /// \brief Get whether the control key was held during this key event
-        /// \return True if the control key was pressed
-        public: bool Control() const
-        {
-          return this->control;
-        }
-
-        /// \brief Get whether the alt key was held during this key event
-        /// \return True if the alt key was pressed
-        public: bool Alt() const
-        {
-          return this->alt;
-        }
-
         /// \brief The key that the user pressed within the scene.
-        private: int key;
-
-        /// \brief Was control held during this key event?
-        private: bool control = false;
-
-        /// \brief Was shift held during this key event?
-        private: bool shift = false;
-
-        /// \brief Was alt held during this key event?
-        private: bool alt = false;
+        private: ignition::common::KeyEvent key;
       };
     }
   }

@@ -203,19 +203,19 @@ TEST(Scene3DTest, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Events))
     {
       receivedKeyReleaseEvent = true;
       auto keyReleased = static_cast<events::KeyRelease*>(_event);
-      keyReleasedValue = keyReleased->Key();
-      receivedKeyReleaseEventAlt = keyReleased->Alt();
-      receivedKeyReleaseEventControl = keyReleased->Control();
-      receivedKeyReleaseEventShift = keyReleased->Shift();
+      keyReleasedValue = keyReleased->Key().Key();
+      receivedKeyReleaseEventAlt = keyReleased->Key().Alt();
+      receivedKeyReleaseEventControl = keyReleased->Key().Control();
+      receivedKeyReleaseEventShift = keyReleased->Key().Shift();
     }
     else if (_event->type() == events::KeyPress::kType)
     {
       receivedKeyPressEvent = true;
       auto keyPress = static_cast<events::KeyPress*>(_event);
-      keyPressedValue = keyPress->Key();
-      receivedKeyPressEventAlt = keyPress->Alt();
-      receivedKeyPressEventControl = keyPress->Control();
-      receivedKeyPressEventShift = keyPress->Shift();
+      keyPressedValue = keyPress->Key().Key();
+      receivedKeyPressEventAlt = keyPress->Key().Alt();
+      receivedKeyPressEventControl = keyPress->Key().Control();
+      receivedKeyPressEventShift = keyPress->Key().Shift();
     }
   };
 
