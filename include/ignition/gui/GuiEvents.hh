@@ -267,7 +267,8 @@ namespace ignition
         /// \brief Constructor
         /// \param[in] _mouse The left mouse event
         /// the scene
-        public: explicit LeftClickOnScene(const ignition::common::MouseEvent &_mouse)
+        public: explicit LeftClickOnScene(
+          const ignition::common::MouseEvent &_mouse)
             : QEvent(kType), mouse(_mouse)
         {
         }
@@ -292,7 +293,8 @@ namespace ignition
         /// \brief Constructor
         /// \param[in] _mouse The right mouse event
         /// the scene
-        public: explicit RightClickOnScene(const ignition::common::MouseEvent &_mouse)
+        public: explicit RightClickOnScene(
+          const ignition::common::MouseEvent &_mouse)
             : QEvent(kType), mouse(_mouse)
         {
         }
