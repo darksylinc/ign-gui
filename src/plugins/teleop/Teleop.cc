@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Open Source Robotics Foundation
+ * Copyright (C) 2021 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,8 @@ namespace gui
     public: ignition::transport::Node node;
 
     /// \brief Topic
-    public: std::string topic = "cmd_vel";
+    public: std::string topic = "/cmd_vel";
+
   };
 }
 }
@@ -76,14 +77,24 @@ void Teleop::LoadConfig(const tinyxml2::XMLElement *)
 }
 
 /////////////////////////////////////////////////
-void Teleop::OnForward(int _x)
+void Teleop::OnForwardButton()
 {
+  ignmsg << "[OnForwardButton]: Forward pressed " << std::endl;
   ignition::msgs::Twist cmdVelMsg;
   cmdVelMsg.mutable_linear()->set_x(1.0);
   cmdVelMsg.mutable_angular()->set_z(1.0);
 
   cmdVelPub.Publish(cmdVelMsg);
 
+}
+
+/////////////////////////////////////////////////
+void Teleop::OnTopicSelection(const QString& _topic)
+{
+  this->dataPtr->topic = _topic.toStdString();
+  ignmsg << "[OnTopicSelection]: topic: " << this->dataPtr->topic << std::endl;
+  cmdVelPub = this->dataPtr->node.Advertise<ignition::msgs::Twist>
+      (this->dataPtr->topic);
 }
 
 

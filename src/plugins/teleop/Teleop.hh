@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Open Source Robotics Foundation
+ * Copyright (C) 2021 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,9 @@ namespace gui
     public: virtual void LoadConfig(const tinyxml2::XMLElement *) override;
 
     // 
-    public slots: void OnForward(int _x);
+    public slots: void OnForwardButton();
+
+    public slots: void OnTopicSelection(const QString& _topic);
 
     /// \internal
     /// \brief Pointer to private data.

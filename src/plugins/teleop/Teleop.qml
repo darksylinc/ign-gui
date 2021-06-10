@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Open Source Robotics Foundation
+ * Copyright (C) 2021 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,125 +16,139 @@
 */
 
 import QtQuick 2.0
-import QtQuick.Controls 2.0
+import QtQuick.Controls 1.4
+import QtQuick.Controls.Material 2.1
+import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.3
 
-ToolBar {
-  Layout.minimumWidth: 200
+Rectangle {
+  Layout.minimumWidth: 250
   Layout.minimumHeight: 200
+  anchors.fill: parent
 
-  background: Rectangle {
-      color: "transparent"
+  Label {
+    id: topicLabel
+    text: "Topic:"
+    anchors.top: parent.top
+    anchors.topMargin: 10
+    anchors.left: parent.left
+    anchors.leftMargin: 5
+  }
+  TextField {
+    id: topicField
+    anchors.top: parent.top
+    anchors.topMargin: 5
+    anchors.left: topicLabel.right
+    anchors.leftMargin: 5
+    anchors.right: buttonsGrid.right
+    Layout.fillWidth: true
+    text: "/cmd_vel"
+
+    placeholderText: qsTr("Topic to publish...")
+    onTextChanged: {
+      Teleop.OnTopicSelection(text)
+    }
   }
 
   GridLayout {
-      columns: 4   
+    id: buttonsGrid
+    anchors.top: topicField.bottom
+    anchors.topMargin: 15
+    anchors.left: parent.left
+    anchors.leftMargin: 5
+    Layout.fillWidth: true
+    columns: 4
 
-      Label {
-        text: "Topic"
-        Layout.column: 0
+    Button {
+      id: forwardButton
+      text: "Forward"
+      checkable: false
+      Layout.row: 0
+      Layout.column: 1
+      onClicked: {
+        Teleop.OnForwardButton()
       }
-      TextField {
-        id: topicField
-        text: Publisher.topic
-        Layout.row: 0
-        Layout.column: 1
-        selectByMouse: true
-      }
-
-      Button{
-          id: forward_control
-          Layout.row: 1
-          Layout.column: 1
-          contentItem: Text {
-          text: qsTr("Forward")
-          font: control.font
-          color: control.down ? "#17a81a" : "#21be2b"
-          horizontalAlignment: Text.AlignHCenter
+      Material.background: Material.primary
+      style: ButtonStyle {
+        label: Text {
+          renderType: Text.NativeRendering
           verticalAlignment: Text.AlignVCenter
-          elide: Text.ElideRight
-          }
-
-          background: Rectangle {
-          implicitWidth: 100
-          implicitHeight: 40
-          opacity: enabled ? 1 : 0.3
-          border.color: control.down ? "#17a81a" : "#21be2b"
-          border.width: 1
-          radius: 2
-          }
-          onClicked: {
-          Teleop.OnForward(1)
-          }
-      }
-
-      Button{
-          id: left_control
-          Layout.row: 2
-          Layout.column: 0
-          contentItem: Text {
-          text: qsTr("Left")
-          font: control.font
-          color: control.down ? "#17a81a" : "#21be2b"
           horizontalAlignment: Text.AlignHCenter
-          verticalAlignment: Text.AlignVCenter
-          elide: Text.ElideRight
-          }
-          background: Rectangle {
-          implicitWidth: 100
-          implicitHeight: 40
-          opacity: enabled ? 1 : 0.3
-          border.color: control.down ? "#17a81a" : "#21be2b"
-          border.width: 1
-          radius: 2
-          }
+          font.family: "Helvetica"
+          font.pointSize: 10
+          color: "black"
+          text: forwardButton.text
+        }
       }
+    }
 
-      Button{
-          id: right_control
-          Layout.row: 2
-          Layout.column: 2
-          contentItem: Text {
-          text: qsTr("Right")
-          font: control.font
-          color: control.down ? "#17a81a" : "#21be2b"
+    Button {
+      id: leftButton
+      text: "Left"
+      checkable: false
+      Layout.row: 1
+      Layout.column: 0
+      onClicked: {
+        Teleop.OnLeftButton()
+      }
+      Material.background: Material.primary
+      style: ButtonStyle {
+        label: Text {
+          renderType: Text.NativeRendering
+          verticalAlignment: Text.AlignVCenter
           horizontalAlignment: Text.AlignHCenter
-          verticalAlignment: Text.AlignVCenter
-          elide: Text.ElideRight
-          }
-          background: Rectangle {
-          implicitWidth: 100
-          implicitHeight: 40
-          opacity: enabled ? 1 : 0.3
-          border.color: control.down ? "#17a81a" : "#21be2b"
-          border.width: 1
-          radius: 2
-          }
+          font.family: "Helvetica"
+          font.pointSize: 10
+          color: "black"
+          text: leftButton.text
+        }
       }
+    }
 
-      Button{
-          id: backward_control
-          Layout.row: 3
-          Layout.column: 1
-          contentItem: Text {
-          text: qsTr("Backward")
-          font: control.font
-          color: control.down ? "#17a81a" : "#21be2b"
+    Button {
+      id: rightButton
+      text: "Right"
+      checkable: false
+      Layout.row: 1
+      Layout.column: 2
+      onClicked: {
+        Teleop.OnRightButton()
+      }
+      Material.background: Material.primary
+      style: ButtonStyle {
+        label: Text {
+          renderType: Text.NativeRendering
+          verticalAlignment: Text.AlignVCenter
           horizontalAlignment: Text.AlignHCenter
-          verticalAlignment: Text.AlignVCenter
-          elide: Text.ElideRight
-          }
-
-          background: Rectangle {
-          implicitWidth: 100
-          implicitHeight: 40
-          opacity: enabled ? 1 : 0.3
-          border.color: control.down ? "#17a81a" : "#21be2b"
-          border.width: 1
-          radius: 2
-          }
+          font.family: "Helvetica"
+          font.pointSize: 10
+          color: "black"
+          text: rightButton.text
+        }
       }
-  
+    }
+
+    Button {
+      id: backwardButton
+      text: "Backward"
+      checkable: false
+      Layout.row: 2
+      Layout.column: 1
+      onClicked: {
+        Teleop.OnBackwardButton()
+      }
+      Material.background: Material.primary
+      style: ButtonStyle {
+        label: Text {
+          renderType: Text.NativeRendering
+          verticalAlignment: Text.AlignVCenter
+          horizontalAlignment: Text.AlignHCenter
+          font.family: "Helvetica"
+          font.pointSize: 10
+          color: "black"
+          text: backwardButton.text
+        }
+      }
+    }
   }
-
 }
