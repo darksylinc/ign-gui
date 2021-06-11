@@ -48,14 +48,36 @@ namespace gui
     // Documentation inherited
     public: virtual void LoadConfig(const tinyxml2::XMLElement *) override;
 
-    // 
-    public slots: void OnForwardButton();
+    /// \brief Callback in Qt thread when the direction of the movement changes.
+    /// \param[in] _linearDirection variable to indicate if the robot its going
+    /// forward or backward.
+    /// \param[in] _angularDirection variable to indicate if the robot its
+    /// turning left or right.
+    public slots: void OnDirectionButton(
+        int _linearDirection, int _angularDirection);
 
+    /// \brief Callback in Qt thread when the topic changes.
+    /// \param[in] _topic variable to indicate the topic in which to
+    /// publish the Twist commands.
     public slots: void OnTopicSelection(const QString& _topic);
+
+    /// \brief Callback in Qt thread when the linear velocity changes.
+    /// \param[in] _velocity variable to indicate the linear velocity.
+    public slots: void OnLinearVelSelection(const QString& _velocity);
+
+    /// \brief Callback in Qt thread when the linear velocity changes.
+    /// \param[in] _velocity variable to indicate the angular velocity.
+    public slots: void OnAngularVelSelection(const QString& _velocity);
 
     /// \internal
     /// \brief Pointer to private data.
     private: std::unique_ptr<TeleopPrivate> dataPtr;
+
+    /// \brief Publisher
+    ignition::transport::Node::Publisher cmdVelPub;
+
+    float linearVel;
+    float angularVel;
   };
 }
 }

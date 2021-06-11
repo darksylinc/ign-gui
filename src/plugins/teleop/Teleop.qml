@@ -23,7 +23,7 @@ import QtQuick.Layouts 1.3
 
 Rectangle {
   Layout.minimumWidth: 250
-  Layout.minimumHeight: 200
+  Layout.minimumHeight: 400
   anchors.fill: parent
 
   Label {
@@ -50,9 +50,57 @@ Rectangle {
     }
   }
 
+  Label {
+    id: linearVelLabel
+    text: "Linear:"
+    anchors.top: topicField.bottom
+    anchors.topMargin: 10
+    anchors.left: parent.left
+    anchors.leftMargin: 5
+  }
+  TextField {
+    id: linearVelField
+    anchors.top: topicField.bottom
+    anchors.topMargin: 5
+    anchors.left: linearVelLabel.right//ambiar a linear label
+    anchors.leftMargin: 5
+    anchors.right: buttonsGrid.right
+    Layout.fillWidth: true
+    text: "0.0"
+
+    placeholderText: qsTr("Linear velocity...")
+    onTextChanged: {
+      Teleop.OnLinearVelSelection(text)
+    }
+  }
+
+  Label {
+    id: angularVelLabel
+    text: "Angular:"
+    anchors.top: linearVelField.bottom
+    anchors.topMargin: 10
+    anchors.left: parent.left
+    anchors.leftMargin: 5
+  }
+  TextField {
+    id: angularVelField
+    anchors.top: linearVelField.bottom
+    anchors.topMargin: 5
+    anchors.left: angularVelLabel.right
+    anchors.leftMargin: 5
+    anchors.right: buttonsGrid.right
+    Layout.fillWidth: true
+    text: "0.0"
+
+    placeholderText: qsTr("Angular velocity...")
+    onTextChanged: {
+      Teleop.OnAngularVelSelection(text)
+    }
+  }
+
   GridLayout {
     id: buttonsGrid
-    anchors.top: topicField.bottom
+    anchors.top: angularVelField.bottom
     anchors.topMargin: 15
     anchors.left: parent.left
     anchors.leftMargin: 5
@@ -66,7 +114,7 @@ Rectangle {
       Layout.row: 0
       Layout.column: 1
       onClicked: {
-        Teleop.OnForwardButton()
+        Teleop.OnDirectionButton(1,0)
       }
       Material.background: Material.primary
       style: ButtonStyle {
@@ -89,7 +137,7 @@ Rectangle {
       Layout.row: 1
       Layout.column: 0
       onClicked: {
-        Teleop.OnLeftButton()
+        Teleop.OnDirectionButton(0, 1)
       }
       Material.background: Material.primary
       style: ButtonStyle {
@@ -112,7 +160,7 @@ Rectangle {
       Layout.row: 1
       Layout.column: 2
       onClicked: {
-        Teleop.OnRightButton()
+        Teleop.OnDirectionButton(0,-1)
       }
       Material.background: Material.primary
       style: ButtonStyle {
@@ -135,7 +183,7 @@ Rectangle {
       Layout.row: 2
       Layout.column: 1
       onClicked: {
-        Teleop.OnBackwardButton()
+        Teleop.OnDirectionButton(-1, 0)
       }
       Material.background: Material.primary
       style: ButtonStyle {
@@ -151,4 +199,5 @@ Rectangle {
       }
     }
   }
+
 }

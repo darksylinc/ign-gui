@@ -31,9 +31,6 @@
 
 #include "Teleop.hh"
 
-/// \brief Publisher
-ignition::transport::Node::Publisher cmdVelPub;
-
 namespace ignition
 {
 namespace gui
@@ -43,7 +40,7 @@ namespace gui
     /// \brief Node for communication
     public: ignition::transport::Node node;
 
-    /// \brief Topic
+    /// \brief Topic. Set '/cmd_vel' as default.
     public: std::string topic = "/cmd_vel";
 
   };
@@ -56,9 +53,6 @@ using namespace gui;
 /////////////////////////////////////////////////
 Teleop::Teleop(): Plugin(), dataPtr(new TeleopPrivate)
 {
-  // Advertise publisher node
-  cmdVelPub = this->dataPtr->node.Advertise<ignition::msgs::Twist>
-    (this->dataPtr->topic);
 }
 
 /////////////////////////////////////////////////
@@ -77,15 +71,16 @@ void Teleop::LoadConfig(const tinyxml2::XMLElement *)
 }
 
 /////////////////////////////////////////////////
-void Teleop::OnForwardButton()
+void Teleop::OnDirectionButton(int _linearDirection, int _angularDirection)
 {
-  ignmsg << "[OnForwardButton]: Forward pressed " << std::endl;
   ignition::msgs::Twist cmdVelMsg;
-  cmdVelMsg.mutable_linear()->set_x(1.0);
-  cmdVelMsg.mutable_angular()->set_z(1.0);
+
+  cmdVelMsg.mutable_linear()->set_x(
+      _linearDirection*this->linearVel);
+  cmdVelMsg.mutable_angular()->set_z(
+      _angularDirection*this->angularVel);
 
   cmdVelPub.Publish(cmdVelMsg);
-
 }
 
 /////////////////////////////////////////////////
@@ -97,6 +92,21 @@ void Teleop::OnTopicSelection(const QString& _topic)
       (this->dataPtr->topic);
 }
 
+/////////////////////////////////////////////////
+void Teleop::OnLinearVelSelection(const QString& _velocity)
+{
+  this->linearVel = _velocity.toDouble();
+  ignmsg << "[OnlinearVelSelection]: linear velocity: "
+      << linearVel << std::endl;
+}
+
+/////////////////////////////////////////////////
+void Teleop::OnAngularVelSelection(const QString& _velocity)
+{
+  this->angularVel = _velocity.toDouble();
+  ignmsg << "[OnlinearVelSelection]: angular velocity: "
+      << angularVel << std::endl;
+}
 
 // Register this plugin
 IGNITION_ADD_PLUGIN(ignition::gui::Teleop,
