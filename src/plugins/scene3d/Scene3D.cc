@@ -1063,10 +1063,9 @@ void IgnRenderer::BroadcastRightClick()
 /////////////////////////////////////////////////
 void IgnRenderer::BroadcastKeyRelease()
 {
-  events::KeyRelease keyRelease(this->dataPtr->keyEvent);
-
   if (this->dataPtr->keyEvent.Type() == common::KeyEvent::RELEASE)
   {
+    events::KeyRelease keyRelease(this->dataPtr->keyEvent);
     App()->sendEvent(App()->findChild<MainWindow *>(), &keyRelease);
     this->dataPtr->keyEvent.SetType(common::KeyEvent::NO_EVENT);
   }
@@ -1075,10 +1074,9 @@ void IgnRenderer::BroadcastKeyRelease()
 /////////////////////////////////////////////////
 void IgnRenderer::BroadcastKeyPress()
 {
-  events::KeyPress keyPress(this->dataPtr->keyEvent);
-
   if (this->dataPtr->keyEvent.Type() == common::KeyEvent::PRESS)
   {
+    events::KeyPress keyPress(this->dataPtr->keyEvent);
     App()->sendEvent(App()->findChild<MainWindow *>(), &keyPress);
     this->dataPtr->keyEvent.SetType(common::KeyEvent::NO_EVENT);
   }

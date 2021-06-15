@@ -145,10 +145,10 @@ namespace plugins
     /// \brief Broadcasts a right click within the scene
     private: void BroadcastRightClick();
 
-    /// \brief Broadcasts the currently key release
+    /// \brief Broadcasts the current key release
     private: void BroadcastKeyRelease();
 
-    /// \brief Broadcasts the currently key press
+    /// \brief Broadcasts the current key press
     private: void BroadcastKeyPress();
 
     /// \brief Retrieve the first point on a surface in the 3D scene hit by a
