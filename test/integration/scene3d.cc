@@ -127,6 +127,12 @@ TEST(Scene3DTest, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Config))
   EXPECT_EQ(math::Pose3d(1, 2, 3, 0, 0, 1.57), camera->WorldPose());
 
   // Cleanup
+  auto plugins = win->findChildren<Plugin *>();
+  for (auto & p : plugins)
+  {
+    auto pluginName = p->CardItem()->objectName();
+    app.RemovePlugin(pluginName.toStdString());
+  }
   win->QuickWindow()->close();
   engine->DestroyScene(scene);
   rendering::unloadEngine(engine->Name());
@@ -257,5 +263,11 @@ TEST(Scene3DTest, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Events))
   EXPECT_NEAR(4.159424, leftClickPoint.Z(), 1e-4);
 
   // Cleanups
+  auto plugins = win->findChildren<Plugin *>();
+  for (auto & p : plugins)
+  {
+    auto pluginName = p->CardItem()->objectName();
+    app.RemovePlugin(pluginName.toStdString());
+  }
   win->QuickWindow()->close();
 }
