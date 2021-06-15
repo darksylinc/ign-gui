@@ -124,6 +124,9 @@ TEST(Scene3DTest, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Config))
   ASSERT_NE(nullptr, camera);
 
   EXPECT_EQ(math::Pose3d(1, 2, 3, 0, 0, 1.57), camera->WorldPose());
+
+  engine->DestroyScene(scene);
+  rendering::unloadEngine(engine->Name());
 }
 
 /////////////////////////////////////////////////
