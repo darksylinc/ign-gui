@@ -62,6 +62,7 @@ TEST(Scene3DTest, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Load))
 
   // Cleanup
   plugins.clear();
+  win->QuickWindow()->close();
 }
 
 /////////////////////////////////////////////////
@@ -125,6 +126,8 @@ TEST(Scene3DTest, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Config))
 
   EXPECT_EQ(math::Pose3d(1, 2, 3, 0, 0, 1.57), camera->WorldPose());
 
+  // Cleanup
+  win->QuickWindow()->close();
   engine->DestroyScene(scene);
   rendering::unloadEngine(engine->Name());
 }
@@ -252,4 +255,7 @@ TEST(Scene3DTest, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Events))
   EXPECT_NEAR(1.0, leftClickPoint.X(), 1e-4);
   EXPECT_NEAR(11.942695, leftClickPoint.Y(), 1e-4);
   EXPECT_NEAR(4.159424, leftClickPoint.Z(), 1e-4);
+
+  // Cleanups
+  win->QuickWindow()->close();
 }
