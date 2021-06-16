@@ -261,11 +261,12 @@ namespace ignition
 
       /// \brief Event which is called to broadcast the key release within
       /// the scene.
-      class KeyRelease : public QEvent
+      class KeyReleaseOnScene : public QEvent
       {
         /// \brief Constructor
         /// \param[in] _key The key released event within the scene
-        public: explicit KeyRelease(const ignition::common::KeyEvent &_key)
+        public: explicit KeyReleaseOnScene(
+          const ignition::common::KeyEvent &_key)
             : QEvent(kType), key(_key)
         {
         }
@@ -286,14 +287,15 @@ namespace ignition
 
       /// \brief Event which is called to broadcast the key press within
       /// the scene.
-      class KeyPress : public QEvent
+      class KeyPressOnScene : public QEvent
       {
         /// \brief Constructor
         /// \param[in] _key The pressed key within the scene
         /// \param[in] _control Was control held during this key event?
         /// \param[in] _shift Was shift held during this key event?
         /// \param[in] _alt Was alt held during this key event?
-        public: explicit KeyPress(const ignition::common::KeyEvent &_key)
+        public: explicit KeyPressOnScene(
+          const ignition::common::KeyEvent &_key)
             : QEvent(kType), key(_key)
         {
         }

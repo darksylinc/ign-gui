@@ -1065,7 +1065,7 @@ void IgnRenderer::BroadcastKeyRelease()
 {
   if (this->dataPtr->keyEvent.Type() == common::KeyEvent::RELEASE)
   {
-    events::KeyRelease keyRelease(this->dataPtr->keyEvent);
+    events::KeyReleaseOnScene keyRelease(this->dataPtr->keyEvent);
     App()->sendEvent(App()->findChild<MainWindow *>(), &keyRelease);
     this->dataPtr->keyEvent.SetType(common::KeyEvent::NO_EVENT);
   }
@@ -1076,7 +1076,7 @@ void IgnRenderer::BroadcastKeyPress()
 {
   if (this->dataPtr->keyEvent.Type() == common::KeyEvent::PRESS)
   {
-    events::KeyPress keyPress(this->dataPtr->keyEvent);
+    events::KeyPressOnScene keyPress(this->dataPtr->keyEvent);
     App()->sendEvent(App()->findChild<MainWindow *>(), &keyPress);
     this->dataPtr->keyEvent.SetType(common::KeyEvent::NO_EVENT);
   }

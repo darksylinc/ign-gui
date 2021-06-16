@@ -199,19 +199,19 @@ TEST(Scene3DTest, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Events))
     {
       receivedHoverEvent = true;
     }
-    else if (_event->type() == events::KeyRelease::kType)
+    else if (_event->type() == events::KeyReleaseOnScene::kType)
     {
       receivedKeyReleaseEvent = true;
-      auto keyReleased = static_cast<events::KeyRelease*>(_event);
+      auto keyReleased = static_cast<events::KeyReleaseOnScene*>(_event);
       keyReleasedValue = keyReleased->Key().Key();
       receivedKeyReleaseEventAlt = keyReleased->Key().Alt();
       receivedKeyReleaseEventControl = keyReleased->Key().Control();
       receivedKeyReleaseEventShift = keyReleased->Key().Shift();
     }
-    else if (_event->type() == events::KeyPress::kType)
+    else if (_event->type() == events::KeyPressOnScene::kType)
     {
       receivedKeyPressEvent = true;
-      auto keyPress = static_cast<events::KeyPress*>(_event);
+      auto keyPress = static_cast<events::KeyPressOnScene*>(_event);
       keyPressedValue = keyPress->Key().Key();
       receivedKeyPressEventAlt = keyPress->Key().Alt();
       receivedKeyPressEventControl = keyPress->Key().Control();

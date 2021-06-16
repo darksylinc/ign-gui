@@ -88,14 +88,14 @@ TEST(GuiEventsTest, RightClickToScene)
 }
 
 /////////////////////////////////////////////////
-TEST(GuiEventsTest, KeyPress)
+TEST(GuiEventsTest, KeyPressOnScene)
 {
   ignition::common::KeyEvent key;
   key.SetKey(49);
   key.SetControl(true);
   key.SetAlt(false);
   key.SetShift(false);
-  events::KeyPress event(key);
+  events::KeyPressOnScene event(key);
 
   EXPECT_LT(QEvent::User, event.type());
   EXPECT_EQ(49, event.Key().Key());
@@ -105,14 +105,14 @@ TEST(GuiEventsTest, KeyPress)
 }
 
 /////////////////////////////////////////////////
-TEST(GuiEventsTest, KeyRelease)
+TEST(GuiEventsTest, KeyReleaseOnScene)
 {
   ignition::common::KeyEvent key;
   key.SetKey(49);
   key.SetControl(true);
   key.SetAlt(true);
   key.SetShift(true);
-  events::KeyRelease event(key);
+  events::KeyReleaseOnScene event(key);
 
   EXPECT_LT(QEvent::User, event.type());
   EXPECT_EQ(49, event.Key().Key());
