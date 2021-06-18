@@ -25,6 +25,7 @@ Rectangle {
   Layout.minimumWidth: 250
   Layout.minimumHeight: 400
   anchors.fill: parent
+  focus: true
 
   Label {
     id: topicLabel
@@ -109,12 +110,15 @@ Rectangle {
 
     Button {
       id: forwardButton
-      text: "Forward"
-      checkable: false
+      text: "\u25B2"
+      checkable: true
       Layout.row: 0
       Layout.column: 1
       onClicked: {
-        Teleop.OnDirectionButton(1,0)
+        Teleop.linearDir = forwardButton.checked ? 1 : 0
+        if(backwardButton.checked)
+          backwardButton.checked = false
+        Teleop.OnDirectionButton()
       }
       Material.background: Material.primary
       style: ButtonStyle {
@@ -132,12 +136,15 @@ Rectangle {
 
     Button {
       id: leftButton
-      text: "Left"
-      checkable: false
+      text: "\u25C0"
+      checkable: true
       Layout.row: 1
       Layout.column: 0
       onClicked: {
-        Teleop.OnDirectionButton(0, 1)
+        Teleop.angularDir = leftButton.checked ? 1 : 0
+        if(rightButton.checked)
+          rightButton.checked = false
+        Teleop.OnDirectionButton()
       }
       Material.background: Material.primary
       style: ButtonStyle {
@@ -155,12 +162,15 @@ Rectangle {
 
     Button {
       id: rightButton
-      text: "Right"
-      checkable: false
+      text: "\u25B6"
+      checkable: true
       Layout.row: 1
       Layout.column: 2
       onClicked: {
-        Teleop.OnDirectionButton(0,-1)
+        Teleop.angularDir = rightButton.checked ? -1 : 0
+        if(leftButton.checked)
+          leftButton.checked = false
+        Teleop.OnDirectionButton()
       }
       Material.background: Material.primary
       style: ButtonStyle {
@@ -178,12 +188,15 @@ Rectangle {
 
     Button {
       id: backwardButton
-      text: "Backward"
-      checkable: false
+      text: "\u25BC"
+      checkable: true
       Layout.row: 2
       Layout.column: 1
       onClicked: {
-        Teleop.OnDirectionButton(-1, 0)
+        Teleop.linearDir = backwardButton.checked ? -1 : 0
+        if(forwardButton.checked)
+          forwardButton.checked = false
+        Teleop.OnDirectionButton()
       }
       Material.background: Material.primary
       style: ButtonStyle {
@@ -198,6 +211,53 @@ Rectangle {
         }
       }
     }
+
+    Button {
+      id: stopButton
+      text: "Stop"
+      checkable: false
+      Layout.row: 1
+      Layout.column: 1
+      onClicked: {
+        Teleop.linearDir = 0
+        Teleop.angularDir = 0
+        forwardButton.checked = false
+        leftButton.checked = false
+        rightButton.checked = false
+        backwardButton.checked = false
+        Teleop.OnDirectionButton()
+      }
+      Material.background: Material.primary
+      style: ButtonStyle {
+        label: Text {
+          renderType: Text.NativeRendering
+          verticalAlignment: Text.AlignVCenter
+          horizontalAlignment: Text.AlignHCenter
+          font.family: "Helvetica"
+          font.pointSize: 10
+          color: "black"
+          text: stopButton.text
+        }
+      }
+    }
   }
 
+  Label {
+    id: switchLabel
+    text: "Keyboard Enable"
+    anchors.top: buttonsGrid.bottom
+    anchors.topMargin: 10
+    anchors.left: parent.left
+    anchors.leftMargin: 5
+  }
+  Switch {
+    id: keySwitch
+    anchors.top: buttonsGrid.bottom
+    anchors.topMargin: 5
+    anchors.left: switchLabel.right
+    anchors.leftMargin: 5
+    onClicked: {
+      Teleop.OnKeySwitch(checked);
+    }
+  }
 }

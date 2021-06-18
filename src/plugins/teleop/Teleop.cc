@@ -35,6 +35,15 @@ namespace ignition
 {
 namespace gui
 {
+
+  struct keyPress{
+    bool forward;
+    bool left;
+    bool right;
+    bool backward;
+    bool stop;
+  };
+
   class TeleopPrivate
   {
     /// \brief Node for communication
@@ -42,6 +51,18 @@ namespace gui
 
     /// \brief Topic. Set '/cmd_vel' as default.
     public: std::string topic = "/cmd_vel";
+
+    /// \brief Publisher
+    ignition::transport::Node::Publisher cmdVelPub;
+
+    public: float linearVel = 0;
+    public: float angularVel = 0;
+
+    public: int linearDir = 0;
+    public: int angularDir = 0;
+    public: keyPress state;
+
+    public: bool keyEnable = false;
 
   };
 }
@@ -71,16 +92,16 @@ void Teleop::LoadConfig(const tinyxml2::XMLElement *)
 }
 
 /////////////////////////////////////////////////
-void Teleop::OnDirectionButton(int _linearDirection, int _angularDirection)
+void Teleop::OnDirectionButton()
 {
   ignition::msgs::Twist cmdVelMsg;
 
   cmdVelMsg.mutable_linear()->set_x(
-      _linearDirection*this->linearVel);
+      this->dataPtr->linearDir * this->dataPtr->linearVel);
   cmdVelMsg.mutable_angular()->set_z(
-      _angularDirection*this->angularVel);
+      this->dataPtr->angularDir * this->dataPtr->angularVel);
 
-  cmdVelPub.Publish(cmdVelMsg);
+  this->dataPtr->cmdVelPub.Publish(cmdVelMsg);
 }
 
 /////////////////////////////////////////////////
@@ -88,24 +109,137 @@ void Teleop::OnTopicSelection(const QString& _topic)
 {
   this->dataPtr->topic = _topic.toStdString();
   ignmsg << "[OnTopicSelection]: topic: " << this->dataPtr->topic << std::endl;
-  cmdVelPub = this->dataPtr->node.Advertise<ignition::msgs::Twist>
-      (this->dataPtr->topic);
+  this->dataPtr->cmdVelPub =
+    this->dataPtr->node.Advertise<ignition::msgs::Twist>(this->dataPtr->topic);
 }
 
 /////////////////////////////////////////////////
 void Teleop::OnLinearVelSelection(const QString& _velocity)
 {
-  this->linearVel = _velocity.toDouble();
+  this->dataPtr->linearVel = _velocity.toDouble();
   ignmsg << "[OnlinearVelSelection]: linear velocity: "
-      << linearVel << std::endl;
+      << this->dataPtr->linearVel << std::endl;
 }
 
 /////////////////////////////////////////////////
 void Teleop::OnAngularVelSelection(const QString& _velocity)
 {
-  this->angularVel = _velocity.toDouble();
+  this->dataPtr->angularVel = _velocity.toDouble();
   ignmsg << "[OnlinearVelSelection]: angular velocity: "
-      << angularVel << std::endl;
+      << this->dataPtr->angularVel << std::endl;
+}
+
+/////////////////////////////////////////////////
+void Teleop::OnKeySwitch(bool _checked)
+{
+  this->dataPtr->linearDir = 0;
+  this->dataPtr->angularDir = 0;
+  this->dataPtr->keyEnable = _checked;
+}
+
+/////////////////////////////////////////////////
+bool Teleop::eventFilter(QObject *_obj, QEvent *_event)
+{
+  if(_event->type() == QEvent::KeyPress && this->dataPtr->keyEnable == true)
+  {
+    QKeyEvent *keyEvent = static_cast<QKeyEvent*>(_event);
+    switch(keyEvent->key())
+    {
+      case Qt::Key_W:
+        this->dataPtr->state.forward = true;
+        break;
+      case Qt::Key_A:
+        this->dataPtr->state.left = true;
+        break;
+      case Qt::Key_D:
+        this->dataPtr->state.right = true;
+        break;
+      case Qt::Key_X:
+        this->dataPtr->state.backward = true;
+        break;
+      case Qt::Key_S:
+        this->dataPtr->state.stop = true;
+        break;
+      default:
+        ignmsg << "A non valid key was pressed" << std::endl;
+        break;
+    }
+    setKeyDirection();
+    OnDirectionButton();
+  }
+  if(_event->type() == QEvent::KeyRelease && this->dataPtr->keyEnable == true)
+  {
+    QKeyEvent *keyEvent1 = static_cast<QKeyEvent*>(_event);
+    switch(keyEvent1->key())
+    {
+      case Qt::Key_W:
+        this->dataPtr->state.forward = false;
+        break;
+      case Qt::Key_A:
+        this->dataPtr->state.left = false;
+        break;
+      case Qt::Key_D:
+        this->dataPtr->state.right = false;
+        break;
+      case Qt::Key_X:
+        this->dataPtr->state.backward = false;
+        break;
+      case Qt::Key_S:
+        this->dataPtr->state.stop = false;
+        break;
+      default:
+        ignmsg << "A non valid key was pressed" << std::endl;
+        break;
+    }
+    setKeyDirection();
+    OnDirectionButton();
+  }
+
+  return QObject::eventFilter(_obj, _event);
+}
+
+/////////////////////////////////////////////////
+void Teleop::setKeyDirection()
+{
+  if(this->dataPtr->state.forward)
+    this->dataPtr->linearDir = 1;
+  else if(this->dataPtr->state.backward)
+    this->dataPtr->linearDir = -1;
+  else
+    this->dataPtr->linearDir = 0;
+
+  if(this->dataPtr->state.left)
+    this->dataPtr->angularDir = 1;
+  else if(this->dataPtr->state.right)
+    this->dataPtr->angularDir = -1;
+  else
+    this->dataPtr->angularDir = 0;
+}
+
+/////////////////////////////////////////////////
+int Teleop::LinearDirection() const
+{
+  return this->dataPtr->linearDir;
+}
+
+/////////////////////////////////////////////////
+void Teleop::setLinearDirection(int _linearDir)
+{
+  this->dataPtr->linearDir = _linearDir;
+  this->LinearDirectionChanged();
+}
+
+/////////////////////////////////////////////////
+int Teleop::AngularDirection() const
+{
+  return this->dataPtr->angularDir;
+}
+
+/////////////////////////////////////////////////
+void Teleop::setAngularDirection(int _angularDir)
+{
+  this->dataPtr->angularDir = _angularDir;
+  this->AngularDirectionChanged();
 }
 
 // Register this plugin

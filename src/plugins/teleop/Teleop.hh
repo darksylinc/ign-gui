@@ -39,6 +39,22 @@ namespace gui
   {
     Q_OBJECT
 
+    /// \brief Linear direction
+    Q_PROPERTY(
+      int linearDir
+      READ LinearDirection
+      WRITE setLinearDirection
+      NOTIFY LinearDirectionChanged
+    )
+
+    /// \brief Angular direction
+    Q_PROPERTY(
+      int angularDir
+      READ AngularDirection
+      WRITE setAngularDirection
+      NOTIFY AngularDirectionChanged
+    )
+
     /// \brief Constructor
     public: Teleop();
 
@@ -48,16 +64,34 @@ namespace gui
     // Documentation inherited
     public: virtual void LoadConfig(const tinyxml2::XMLElement *) override;
 
+    protected: bool eventFilter(QObject *_obj, QEvent *_event) override;
+
     /// \brief Callback in Qt thread when the direction of the movement changes.
-    /// \param[in] _linearDirection variable to indicate if the robot its going
-    /// forward or backward.
-    /// \param[in] _angularDirection variable to indicate if the robot its
-    /// turning left or right.
-    public slots: void OnDirectionButton(
-        int _linearDirection, int _angularDirection);
+    public slots: void OnDirectionButton();
+
+    /// \brief Returns the linear direction variable value.
+    ///  When the movement is forward it takes the value 1 and when
+    /// is backward it takes the value -1.
+    public: Q_INVOKABLE int LinearDirection() const;
+
+    /// \brief Set the linear direction of the movement.
+    public: Q_INVOKABLE void setLinearDirection(int _linearDir);
+
+    /// \brief Notify that the linear direction changed.
+    signals: void LinearDirectionChanged();
+
+    /// \brief Returns the angular direction variable value. When the turn is
+    /// left it takes the value 1 and when is right it takes the value -1.
+    public: Q_INVOKABLE int AngularDirection() const;
+
+    /// \brief Set the angular direction of the movement.
+    public: Q_INVOKABLE void setAngularDirection(int _angularDir);
+
+    /// \brief Notify that the angular direction changed.
+    signals: void AngularDirectionChanged();
 
     /// \brief Callback in Qt thread when the topic changes.
-    /// \param[in] _topic variable to indicate the topic in which to
+    /// \param[in] _topic variable to indicate the topic to
     /// publish the Twist commands.
     public slots: void OnTopicSelection(const QString& _topic);
 
@@ -69,15 +103,17 @@ namespace gui
     /// \param[in] _velocity variable to indicate the angular velocity.
     public slots: void OnAngularVelSelection(const QString& _velocity);
 
+    /// \brief Callback in Qt thread when the keyboard is enabled or disabled.
+    /// \param[in] _checked variable to indicate the state of the switch.
+    public slots: void OnKeySwitch(bool _checked);
+
+    /// \brief Sets the movement direction when the keyboard is used.
+    public: void setKeyDirection();
+
     /// \internal
     /// \brief Pointer to private data.
     private: std::unique_ptr<TeleopPrivate> dataPtr;
 
-    /// \brief Publisher
-    ignition::transport::Node::Publisher cmdVelPub;
-
-    float linearVel;
-    float angularVel;
   };
 }
 }
